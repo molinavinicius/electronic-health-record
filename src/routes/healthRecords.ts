@@ -1,5 +1,6 @@
 import HealthRecordService from '../services/healthRecord.service';
 import validationMiddleware from '../middleware/validateRequest'
+import { isAuth } from '../middleware/isAuth';
 import express, { Request, Response } from 'express';
 import { HealthRecord } from '../models/healthRecord';
 
@@ -49,7 +50,9 @@ HealthRecordRouter.get('/:id', async (req: Request, res: Response) => {
 *      '200':
 *        description: A successful response
 */
-HealthRecordRouter.post('/', validationMiddleware(HealthRecord), async (req: Request, res: Response) => {
+HealthRecordRouter.post('/', isAuth, validationMiddleware(HealthRecord), async (req: any, res: Response) => {
+    req.body.healthProfessional = req.userId
+    console.log('req.body', req.body)
     let createdUser = await HealthRecordService.save(req.body)
     return res.status(createdUser.statusCode).json(createdUser)
 });

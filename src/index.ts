@@ -6,6 +6,9 @@ import bodyParser from 'body-parser';
 import "reflect-metadata"
 import { AppDataSource } from './database';
 import rootRouter from './routes';
+import { configDotenv } from 'dotenv';
+
+configDotenv()
 
 const swaggerOptions = {
     definition: {
@@ -24,7 +27,7 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 AppDataSource.initialize().then(async () => {
     const app = express();
-
+    console.log(process.env.JWT_SECRET)
     // Porta do servidor
     const PORT = process.env.PORT || 8080
     // Host do servidor
