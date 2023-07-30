@@ -10,11 +10,11 @@ import { Repository } from "typeorm";
  * @property {T | T[]} [data] - Optional return data of Type T or an array of Type T
  * @property {any} [error] - Optional error object if an error occurred
  */
-type ServiceReturn<T> = {
+export type ServiceReturn<T> = {
     status: "success" | "error",
     statusCode: number,
     message?: string,
-    data?: T | T[],
+    data?: T | T[] | any,
     error?: any
 }
 
