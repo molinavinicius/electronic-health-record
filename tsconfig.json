@@ -28,5 +28,12 @@
     "sourceMap": true,
 
     "strictPropertyInitialization": false,
-  }
+
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "frontend"
+  ]
 }

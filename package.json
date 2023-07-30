@@ -9,7 +9,11 @@
     "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec 'ts-node' ./src/index.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs -d src/database/index.ts",
+    "migration:create": "cross-var ts-node ./node_modules/typeorm/cli migration:create ./src/database/migrations/$npm_config_name",
+    "migration:generate": "cross-var npm run typeorm -- migration:generate ./src/database/migrations/$npm_config_name",
+    "migration:run": "npm run build && npm run typeorm -- migration:run",
+    "migration:revert": "npm run typeorm -- migration:revert"
   },
   "repository": {
     "type": "git",
