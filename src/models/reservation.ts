@@ -1,14 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
-import { IsDate, IsNotEmpty } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { IsDateString, IsNotEmpty } from 'class-validator';
 import { Patient } from "./patient";
-
-export type IAppointment = {
-    id: number;
-    patientId: number;
-    appointmentDate: Date,
-    notes: string
-};
-
 
 @Entity()
 export class Reservation {
@@ -16,16 +8,22 @@ export class Reservation {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne(() => Patient)
+    @ManyToOne(() => Patient, (patient) => patient.id, { cascade: true, eager: true })
     @JoinColumn()
     @IsNotEmpty()
     patient: Patient
 
     @Column()
     @IsNotEmpty()
-    @IsDate()
+    @IsDateString()
     appointmentDate: Date
 
     @Column()
-    notes: string
+    notes?: string
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 }

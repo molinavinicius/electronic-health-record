@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm"
 import { IsEmail, IsEnum, IsInt, IsNotEmpty } from 'class-validator';
+import { Reservation } from './reservation';
+import { HealthRecord } from './healthRecord';
 
 enum Gender {
     Male = 'male',
@@ -39,6 +41,12 @@ export class Patient {
     @Column("int", { nullable: true })
     @IsInt()
     weight: number
+
+    @OneToMany(() => Reservation, reservation => reservation.patient)
+    reservations: Reservation[];
+
+    @OneToMany(() => HealthRecord, healthRecord => healthRecord.patient, { eager: true })
+    healthRecords: HealthRecord[];
 
     @CreateDateColumn()
     createdAt: Date
