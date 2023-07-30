@@ -1,6 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import { IsEmail, IsInt, IsNotEmpty } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsEmail, IsEnum, IsInt, IsNotEmpty } from 'class-validator';
+
+enum Gender {
+    Male = 'male',
+    Female = 'female'
+}
 
 @Entity()
 export class Patient {
@@ -9,31 +13,30 @@ export class Patient {
 
     @Column()
     @IsNotEmpty()
-    @Transform(({ value }) => value || undefined)
     name: string
 
     @Column()
     @IsNotEmpty()
-    @Transform(({ value }) => value || undefined)
     phone: string
 
     @Column()
     @IsNotEmpty()
-    @Transform(({ value }) => value || undefined)
     @IsEmail()
     email: string
 
+    @Column()
+    @IsNotEmpty()
+    @IsEnum(Gender)
+    gender: Gender
+
     @Column({ nullable: true })
-    @Transform(({ value }) => value || undefined)
     birthDate: string
 
     @Column("int", { nullable: true })
-    @Transform(({ value }) => value || undefined)
     @IsInt()
     height: number
 
     @Column("int", { nullable: true })
-    @Transform(({ value }) => value || undefined)
     @IsInt()
     weight: number
 

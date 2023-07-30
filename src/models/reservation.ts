@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
-import { IsNotEmpty, ValidateIf } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsDate, IsNotEmpty } from 'class-validator';
 import { Patient } from "./patient";
 
 export type IAppointment = {
@@ -20,18 +19,13 @@ export class Reservation {
     @OneToOne(() => Patient)
     @JoinColumn()
     @IsNotEmpty()
-    @Transform(({ value }) => value || undefined)
-    @ValidateIf((object, value) => object.hasOwnProperty('patient'))
     patient: Patient
 
     @Column()
     @IsNotEmpty()
-    @Transform(({ value }) => value || undefined)
-    @ValidateIf((object, value) => object.hasOwnProperty('appointmentDate'))
+    @IsDate()
     appointmentDate: Date
 
     @Column()
-    @Transform(({ value }) => value || undefined)
-    @ValidateIf((object, value) => object.hasOwnProperty('notes'))
     notes: string
 }
