@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import { IsNotEmpty, MinLength } from 'class-validator';
+import { IsNotEmpty, MinLength, ValidateIf, IsDefined } from 'class-validator';
 import { Patient } from "./patient";
 import { Appointment } from "./appointment";
+import { User } from "./user";
 
 @Entity()
 export class HealthRecord {
@@ -16,6 +17,12 @@ export class HealthRecord {
     @OneToOne(() => Appointment)
     @JoinColumn()
     appointment?: Appointment
+
+    @ManyToOne(() => User)
+    @ValidateIf((object, value) => value !== undefined)
+    @IsDefined()
+    @IsNotEmpty()
+    healthProfessional: User
 
     @Column()
     @IsNotEmpty()

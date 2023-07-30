@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
-
+import { Appointment } from './appointment';
+import { HealthRecord } from './healthRecord';
 
 @Entity()
 export class User {
@@ -21,6 +22,12 @@ export class User {
     @IsNotEmpty()
     @Column()
     password: string;
+
+    @OneToMany(() => Appointment, appointment => appointment.healthProfessional)
+    appointments: Appointment[];
+
+    @OneToMany(() => HealthRecord, record => record.healthProfessional)
+    healthRecords: HealthRecord[];
 
     @CreateDateColumn()
     createdAt: Date

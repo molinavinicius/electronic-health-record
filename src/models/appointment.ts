@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { IsDateString, IsNotEmpty } from 'class-validator';
 import { Patient } from "./patient";
+import { User } from "./user";
+
 
 @Entity()
 export class Appointment {
@@ -16,6 +18,10 @@ export class Appointment {
     @IsNotEmpty()
     @IsDateString()
     appointmentDate: Date
+
+    @ManyToOne(() => User)
+    @IsNotEmpty()
+    healthProfessional: User
 
     @Column()
     notes?: string
