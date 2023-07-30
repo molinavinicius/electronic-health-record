@@ -1,15 +1,32 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import patientsRouter from './routes/patients';
-import appointmentsRouter from './routes/appointments';
+import "reflect-metadata"
+import { AppDataSource } from './database';
+import rootRouter from './routes';
 
-const app = express();
+AppDataSource.initialize().then(async () => {
+    const app = express();
 
-app.use(cors());
-app.use(bodyParser.json());
+    // Porta do servidor
+    const PORT = process.env.PORT || 8080
+    // Host do servidor
+    const HOSTNAME = process.env.HOSTNAME || 'http://localhost'
 
-app.use('/pacientes', patientsRouter);
-app.use('/agendamentos', appointmentsRouter);
+    app.use(cors());
+    app.use(bodyParser.json());
+    // // JSON
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
 
-app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
+    app.use('/', rootRouter);
+
+    // Resposta padrão para quaisquer outras requisições:
+    app.use((req, res) => {
+        res.status(404)
+        res.send({ error: 'Endpoint não encontrado' })
+    });
+
+    app.listen(PORT, () => console.log(`Servidor rodando com sucesso ${HOSTNAME}:${PORT}`));
+
+}).catch(err => console.log(err))
