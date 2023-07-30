@@ -1,9 +1,26 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import "reflect-metadata"
 import { AppDataSource } from './database';
 import rootRouter from './routes';
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'CareManager API',
+            version: '1.0.0',
+            description: 'A simple Express API for simulating an EHR system. It contains endpoints for managing users, patients, appointments and health records.',
+            servers: ['http://localhost:8080'],
+        },
+    },
+    apis: ['src/routes/*.ts'],
+};
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 AppDataSource.initialize().then(async () => {
     const app = express();
@@ -20,6 +37,7 @@ AppDataSource.initialize().then(async () => {
     app.use(express.urlencoded({ extended: true }))
 
     app.use('/', rootRouter);
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
     // Resposta padrão para quaisquer outras requisições:
     app.use((req, res) => {

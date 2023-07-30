@@ -8,8 +8,7 @@ export class Appointment {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Patient, (patient) => patient.id, { cascade: true, eager: true })
-    @JoinColumn()
+    @ManyToOne(() => Patient, (patient) => patient.appointments, { cascade: true, eager: true })
     @IsNotEmpty()
     patient: Patient
 
