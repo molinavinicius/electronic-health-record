@@ -3,7 +3,12 @@ import { AppDataSource } from "../database";
 import { EntityTarget } from "typeorm";
 import { Patient } from "../models/patient";
 
-
+/**
+ * Implementation of BaseService for the Patient entity.
+ * 
+ * @class
+ * @extends {BaseService<EntityTarget<Patient>>}
+ */
 class PatientService extends BaseService<EntityTarget<Patient>> {
 
     constructor() {
