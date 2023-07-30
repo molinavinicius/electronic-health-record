@@ -3,7 +3,7 @@ import { IsDateString, IsNotEmpty } from 'class-validator';
 import { Patient } from "./patient";
 
 @Entity()
-export class Reservation {
+export class Appointment {
 
     @PrimaryGeneratedColumn()
     id: number

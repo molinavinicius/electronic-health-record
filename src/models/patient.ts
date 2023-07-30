@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm"
 import { IsEmail, IsEnum, IsInt, IsNotEmpty } from 'class-validator';
-import { Reservation } from './reservation';
+import { Appointment } from './appointment';
 import { HealthRecord } from './healthRecord';
 
 enum Gender {
@@ -42,8 +42,8 @@ export class Patient {
     @IsInt()
     weight: number
 
-    @OneToMany(() => Reservation, reservation => reservation.patient)
-    reservations: Reservation[];
+    @OneToMany(() => Appointment, appointment => appointment.patient)
+    appointments: Appointment[];
 
     @OneToMany(() => HealthRecord, healthRecord => healthRecord.patient, { eager: true })
     healthRecords: HealthRecord[];

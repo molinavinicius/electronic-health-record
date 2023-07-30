@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { IsNotEmpty, MinLength } from 'class-validator';
 import { Patient } from "./patient";
-import { Reservation } from "./reservation";
+import { Appointment } from "./appointment";
 
 @Entity()
 export class HealthRecord {
@@ -16,7 +16,7 @@ export class HealthRecord {
 
     @OneToOne(() => Patient, (patient) => patient.id)
     @JoinColumn()
-    appointment?: Reservation
+    appointment?: Appointment
 
     @Column()
     @IsNotEmpty()
