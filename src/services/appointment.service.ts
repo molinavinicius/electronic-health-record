@@ -5,7 +5,7 @@ import { Appointment } from "../models/appointment";
 
 
 /**
- * Implementation of BaseService for the Appointment entity.
+ * Implementation of CRUD BaseService for the Appointment entity.
  * 
  * @class
  * @extends {BaseService<EntityTarget<Appointment>>}
