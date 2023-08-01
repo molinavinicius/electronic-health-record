@@ -11,9 +11,8 @@ AuthenticationRouter.post('/signup', validationMiddleware(User), async (req: Req
     let createdUser = await AuthenticationService.signup(name, email, password)
 
     let response = {
-        status: createdUser.status,
-        statusCode: createdUser.statusCode,
-        message: createdUser.statusCode === 201 ? "User created succesfully!" : createdUser.message
+        ...createdUser,
+        message: createdUser.status == "success" ? "User created successfully" : createdUser.message
     }
     return res.status(response.statusCode).json(response)
 });

@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import BaseService, { ServiceReturn } from "./base";
+import BaseService from "./base";
+import { APIReturn } from '../types/api';
 import { AppDataSource } from "../database";
 import { EntityTarget } from "typeorm";
 import { User } from '../models/user';
@@ -20,7 +21,7 @@ class AuthenticationService extends BaseService<EntityTarget<User>> {
         this.repository = AppDataSource.getRepository(User);
     }
 
-    async signup(name: string, email: string, password: string): Promise<ServiceReturn<User>> {
+    async signup(name: string, email: string, password: string): Promise<APIReturn<User>> {
         // Check if user exists
         let user = await this.repository.findOne({ where: { email } });
         if (user) {
@@ -37,11 +38,24 @@ class AuthenticationService extends BaseService<EntityTarget<User>> {
         user.password = await bcrypt.hash(password, 8);
         let savedUser = await this.save(user)
 
-        // @ts-ignore
+        const secret = process.env.JWT_SECRET;
+        if (!secret) {
+            throw new Error("JWT Secret is not defined.");
+        }
+
+        var token = null
+        if (savedUser.status == "success") {
+            // Generate JWT token
+            token = jwt.sign({ userId: savedUser.data?.id }, secret, {
+                expiresIn: "6h" // Token expires in 6 hours
+            });
+            savedUser.data.token = token
+        }
+
         return savedUser
     }
 
-    async login(email: string, password: string): Promise<ServiceReturn<User>> {
+    async login(email: string, password: string): Promise<APIReturn<User>> {
         // Check if user exists
         let user = await this.repository.findOne({ where: { email } });
         if (!user) {

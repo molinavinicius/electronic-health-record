@@ -7,12 +7,12 @@ import { HealthRecord } from '../models/healthRecord';
 
 const HealthRecordRouter = express.Router();
 
-HealthRecordRouter.get('/', async (req: Request, res: Response) => {
+HealthRecordRouter.get('/', isAuth, async (req: Request, res: Response) => {
     let allUsers = await HealthRecordService.all()
     return res.status(allUsers.statusCode).json(allUsers)
 });
 
-HealthRecordRouter.get('/:id', async (req: Request, res: Response) => {
+HealthRecordRouter.get('/:id', isAuth, async (req: Request, res: Response) => {
     let id = parseInt(req.params.id)
     let user = await HealthRecordService.one(id)
     return res.status(user.statusCode).json(user)

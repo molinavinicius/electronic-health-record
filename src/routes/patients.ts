@@ -1,34 +1,35 @@
 import PatientService from '../services/patients.service';
 import validationMiddleware from '../middleware/validateRequest'
+import { isAuth } from '../middleware/isAuth';
 import express, { Request, Response } from 'express';
 import { Patient } from '../models/patient';
 
 
 const PatientRouter = express.Router();
 
-PatientRouter.get('/', async (req: Request, res: Response) => {
+PatientRouter.get('/', isAuth, async (req: Request, res: Response) => {
     let allUsers = await PatientService.all()
     return res.status(allUsers.statusCode).json(allUsers)
 });
 
-PatientRouter.get('/:id', async (req: Request, res: Response) => {
+PatientRouter.get('/:id', isAuth, async (req: Request, res: Response) => {
     let id = parseInt(req.params.id)
     let user = await PatientService.one(id)
     return res.status(user.statusCode).json(user)
 });
 
-PatientRouter.post('/', validationMiddleware(Patient), async (req: Request, res: Response) => {
+PatientRouter.post('/', isAuth, validationMiddleware(Patient), async (req: Request, res: Response) => {
     let createdUser = await PatientService.save(req.body)
     return res.status(createdUser.statusCode).json(createdUser)
 });
 
-PatientRouter.put('/:id', validationMiddleware(Patient, true), async (req: Request, res: Response) => {
+PatientRouter.put('/:id', isAuth, validationMiddleware(Patient, true), async (req: Request, res: Response) => {
     let id = parseInt(req.params.id)
     let updatedUser = await PatientService.update(id, req.body)
     return res.status(updatedUser.statusCode).json(updatedUser)
 });
 
-PatientRouter.delete('/:id', async (req: Request, res: Response) => {
+PatientRouter.delete('/:id', isAuth, async (req: Request, res: Response) => {
     let id = parseInt(req.params.id)
     let deletedUser = await PatientService.update(id, req.body)
     return res.status(deletedUser.statusCode).json(deletedUser)
