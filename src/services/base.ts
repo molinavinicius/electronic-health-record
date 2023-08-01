@@ -1,22 +1,5 @@
 import { Repository } from "typeorm";
-
-/**
- * Type definition for service return value
- * 
- * @typedef {Object} ServiceReturn
- * @property {"success" | "error"} status - Status of the operation
- * @property {number} statusCode - HTTP Status Code of the response
- * @property {string} [message] - Optional return message
- * @property {T | T[]} [data] - Optional return data of Type T or an array of Type T
- * @property {any} [error] - Optional error object if an error occurred
- */
-export type ServiceReturn<T> = {
-    status: "success" | "error",
-    statusCode: number,
-    message?: string,
-    data?: T | T[] | any,
-    error?: any
-}
+import { APIReturn } from "../types/api";
 
 /**
  * Base service for data manipulation.
@@ -31,9 +14,9 @@ class BaseService<T> {
     /**
      * Fetch all records of an entity.
      * 
-     * @return {Promise<ServiceReturn<T[]>>} - promise that resolves with all retrieved records
+     * @return {Promise<APIReturn<T[]>>} - promise that resolves with all retrieved records
      */
-    async all(): Promise<ServiceReturn<T[]>> {
+    async all(): Promise<APIReturn<T[]>> {
         try {
             const all = await this.repository.find();
             console.log('all', all);
@@ -54,9 +37,9 @@ class BaseService<T> {
      * Fetch a single record of an entity by id.
      * 
      * @param {Number} id - Id of the record to be retrieved
-     * @return {Promise<ServiceReturn<T>>} - promise that resolves with the retrieved record, or an error if not found
+     * @return {Promise<APIReturn<T>>} - promise that resolves with the retrieved record, or an error if not found
      */
-    async one(id: Number): Promise<ServiceReturn<T>> {
+    async one(id: Number): Promise<APIReturn<T>> {
         try {
             const one = await this.repository.findOne({
                 where: { id }
@@ -86,9 +69,9 @@ class BaseService<T> {
     * Save a new record of an entity.
     * 
     * @param {any} body - Data for the record to be saved
-    * @return {Promise<ServiceReturn<T>>} - promise that resolves with the saved record, or the error if saving failed
+    * @return {Promise<APIReturn<T>>} - promise that resolves with the saved record, or the error if saving failed
     */
-    async save(body: any): Promise<ServiceReturn<T>> {
+    async save(body: any): Promise<APIReturn<T>> {
         try {
             // @ts-ignore
             const entity = Object.assign(new this.entity(), body);
@@ -110,9 +93,9 @@ class BaseService<T> {
      * Remove a record of an entity by id.
      * 
      * @param {Number} id - Id of the record to be removed
-     * @return {Promise<ServiceReturn<T>>} - promise that resolves with an success/error message, or the error if removal failed
+     * @return {Promise<APIReturn<T>>} - promise that resolves with an success/error message, or the error if removal failed
      */
-    async remove(id: Number): Promise<ServiceReturn<T>> {
+    async remove(id: Number): Promise<APIReturn<T>> {
         try {
             const toRemove = await this.repository.findOne({
                 where: { id }
@@ -144,9 +127,9 @@ class BaseService<T> {
      * 
      * @param {Number} id - Id of the record to be updated
      * @param {any} body - New data for the record
-     * @return {Promise<ServiceReturn<T>>} - promise that resolves with the updated record, or the error if update failed
+     * @return {Promise<APIReturn<T>>} - promise that resolves with the updated record, or the error if update failed
      */
-    async update(id: Number, body: any): Promise<ServiceReturn<T>> {
+    async update(id: Number, body: any): Promise<APIReturn<T>> {
         try {
             const toUpdate = await this.repository.findOne({
                 where: { id }
