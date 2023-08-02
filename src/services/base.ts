@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, RemoveOptions, Repository, SaveOptions } from 'typeorm';
 import { APIReturn } from '../types/api';
 
 /**
@@ -16,9 +16,9 @@ class BaseService<T> {
      *
      * @return {Promise<APIReturn<T[]>>} - promise that resolves with all retrieved records
      */
-    async all(): Promise<APIReturn<T[]>> {
+    async all(options?: FindManyOptions<T>): Promise<APIReturn<T[]>> {
         try {
-            const all = await this.repository.find();
+            const all = await this.repository.find(options);
             console.log('all', all);
             return {
                 status: 'success',
@@ -39,10 +39,11 @@ class BaseService<T> {
      * @param {Number} id - Id of the record to be retrieved
      * @return {Promise<APIReturn<T>>} - promise that resolves with the retrieved record, or an error if not found
      */
-    async one(id: Number): Promise<APIReturn<T>> {
+    async one(id: Number, options?: FindOneOptions<T>): Promise<APIReturn<T>> {
         try {
             const one = await this.repository.findOne({
-                where: { id }
+                where: { id },
+                ...options
             });
             if (!one) {
                 return {
@@ -71,11 +72,11 @@ class BaseService<T> {
      * @param {any} body - Data for the record to be saved
      * @return {Promise<APIReturn<T>>} - promise that resolves with the saved record, or the error if saving failed
      */
-    async save(body: any): Promise<APIReturn<T>> {
+    async save(body: any, options?: SaveOptions): Promise<APIReturn<T>> {
         try {
             // @ts-ignore
             const entity = Object.assign(new this.entity(), body);
-            const saved = await this.repository.save(entity);
+            const saved = await this.repository.save(entity, options);
             return {
                 status: 'success',
                 statusCode: 201,
@@ -95,7 +96,7 @@ class BaseService<T> {
      * @param {Number} id - Id of the record to be removed
      * @return {Promise<APIReturn<T>>} - promise that resolves with an success/error message, or the error if removal failed
      */
-    async remove(id: Number): Promise<APIReturn<T>> {
+    async remove(id: Number, options?: RemoveOptions): Promise<APIReturn<T>> {
         try {
             const toRemove = await this.repository.findOne({
                 where: { id }
@@ -107,7 +108,7 @@ class BaseService<T> {
                     message: `The object with id ${id} does not exist`
                 };
             }
-            await this.repository.remove(toRemove);
+            await this.repository.remove(toRemove, options);
             return {
                 status: 'success',
                 statusCode: 202,
@@ -131,6 +132,20 @@ class BaseService<T> {
      */
     async update(id: Number, body: any): Promise<APIReturn<T>> {
         try {
+            // More performatic, but does not trigger the @BeforeUpdate hook
+            // const updated = await this.repository.update(id, body);
+            // if (!updated) {
+            //     return {
+            //         status: 'error',
+            //         statusCode: 404,
+            //         message: `The object with id ${id} does not exist`
+            //     };
+            // }
+            // return {
+            //     status: 'success',
+            //     statusCode: 200,
+            //     data: body
+            // }
             const toUpdate = await this.repository.findOne({
                 where: { id }
             });
@@ -141,6 +156,7 @@ class BaseService<T> {
                     message: `The object with id ${id} does not exist`
                 };
             }
+
             const entity = Object.assign(toUpdate, body);
             const updated = await this.repository.save(entity);
             return {
