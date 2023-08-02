@@ -7,21 +7,34 @@ import 'reflect-metadata';
 import { AppDataSource } from './database';
 import rootRouter from './routes';
 import { configDotenv } from 'dotenv';
+import { runSeeders } from 'typeorm-extension';
 
 configDotenv();
 
 const swaggerOptions = {
     definition: {
-        openapi: '3.0.0',
+        openapi: '3.0.1',
         info: {
             title: 'CareManager API',
             version: '1.0.0',
             description:
                 'A simple Express API for simulating an EHR system. It contains endpoints for managing users, patients, appointments and health records.',
             servers: ['http://localhost:8080']
-        }
+        },
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT"
+                }
+            }
+        },
+        security: [{
+            bearerAuth: []
+        }]
     },
-    apis: ['src/routes/*.ts']
+    apis: ['src/swagger/*.yaml']
 };
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
