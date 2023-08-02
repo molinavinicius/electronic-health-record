@@ -38,17 +38,17 @@ contabilidade.
 - [X] **`docs`**: Documentação da interface da API gerada (swagger, open-api, RAML ou postman);
 - [X] **`feat`**: Os dados devem ser validados (existência e formatos) na inserção/atualização para
 garantir consistência da base;
-- [] **`chore`**: Implementar testes unitários e/ou de integração e/ou documentação de testes (casos
+- [ ] **`chore`**: Implementar testes unitários e/ou de integração e/ou documentação de testes (casos
 de teste / script de teste);
 Requisitos desejáveis
-- [X] **`docs`**: Documentação da modelagem do banco de dados (diagrama ER ou de classe);
-- [X] **`chore`**: Para o banco de dados pode usar MySQL ou PostgreSQL, podendo optar ou não
+- [X] **`docs [optional]`**: Documentação da modelagem do banco de dados (diagrama ER ou de classe);
+- [X] **`chore [optional]`**: Para o banco de dados pode usar MySQL ou PostgreSQL, podendo optar ou não
 pelo uso de ORM;
-- [X] **`chore`**: Setup de ambiente de desenvolvimento usando docker / docker-compose;
-- [] **`infra`**: Hospedar em um ambiente cloud a sua escolha (Heroku, AWS EBS, IBM Cloud, etc)
-- [X] **`feat`**: Garantir autenticação e/ou autorização (login/logout, token JWT, roles)
-- [X] **`chore`**: Implementar alguma ferramenta de lint ou qualidade (sonar, code-quality, eslint, etc)
-- [] **`infra`**: Deploy automatizado via pipeline (gitlab-ci, bitbucket pipeline, github actions, etc)
+- [X] **`chore [optional]`**: Setup de ambiente de desenvolvimento usando docker / docker-compose;
+- [ ] **`infra [optional]`**: Hospedar em um ambiente cloud a sua escolha (Heroku, AWS EBS, IBM Cloud, etc)
+- [X] **`feat [optional]`**: Garantir autenticação e/ou autorização (login/logout, token JWT, roles)
+- [X] **`chore [optional]`**: Implementar alguma ferramenta de lint ou qualidade (sonar, code-quality, eslint, etc)
+- [ ] **`infra [optional]`**: Deploy automatizado via pipeline (gitlab-ci, bitbucket pipeline, github actions, etc)
 
 ### Conclusion
 
