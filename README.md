@@ -13,6 +13,46 @@ Accordingly to the image above, the applicaiton is composed by four data types:
 
 > Please, take a look at `http://localhost:8080/docs` when you run the application to have a better sense of the available routes for each one.
 
+## Deliverables
+
+### User stories
+
+- [X] **`story`**: Eu, como médico, quero poder cadastrar um paciente com os seguintes dados:
+nome, telefone, email, data de nascimento, sexo, altura e peso.
+- [X] **`story`**: Eu, como médico, quero poder listar e editar o perfil dos pacientes cadastrados.
+- [X] **`story`**: Eu, como médico, quero poder cadastrar um agendamento de consulta para um
+paciente.
+- [X] **`story`**: Eu, como médico, quero poder listar, alterar e excluir os agendamentos de consulta.
+- [X] **`story`**: Eu, como médico, quero poder anotar uma observação durante a consulta.
+- [X] **`story`**: Eu, como médico, quero poder visualizar as anotações das consultas dos pacientes.
+- [X] **`story [optional]`**: Eu como médico, quero que o sistema valide a minha agenda, não deixando eu
+cadastrar mais de um paciente na mesma hora.
+- [X] **`story [optional]`**: Eu, como médico, quero poder excluir os dados pessoais do paciente por causa das
+novas regras do LGPD, mas mantendo o histórico de consulta por questões de
+contabilidade.
+
+### Não funcionais
+
+- [X] **`chore`**: Deve usar o padrão de API REST (HTTP/JSON);
+- [X] **`chore`**: Pode ser feito em node.js (javascript ou typescript) ou PHP (laravel);
+- [X] **`docs`**: Documentação da interface da API gerada (swagger, open-api, RAML ou postman);
+- [X] **`feat`**: Os dados devem ser validados (existência e formatos) na inserção/atualização para
+garantir consistência da base;
+- [] **`chore`**: Implementar testes unitários e/ou de integração e/ou documentação de testes (casos
+de teste / script de teste);
+Requisitos desejáveis
+- [X] **`docs`**: Documentação da modelagem do banco de dados (diagrama ER ou de classe);
+- [X] **`chore`**: Para o banco de dados pode usar MySQL ou PostgreSQL, podendo optar ou não
+pelo uso de ORM;
+- [X] **`chore`**: Setup de ambiente de desenvolvimento usando docker / docker-compose;
+- [] **`infra`**: Hospedar em um ambiente cloud a sua escolha (Heroku, AWS EBS, IBM Cloud, etc)
+- [X] **`feat`**: Garantir autenticação e/ou autorização (login/logout, token JWT, roles)
+- [X] **`chore`**: Implementar alguma ferramenta de lint ou qualidade (sonar, code-quality, eslint, etc)
+- [] **`infra`**: Deploy automatizado via pipeline (gitlab-ci, bitbucket pipeline, github actions, etc)
+
+### Conclusion
+
+This way, you can see that almost all the points are completed, missing only the CI/CD flow with unit testing and hosting.
 
 
 ## How to run
