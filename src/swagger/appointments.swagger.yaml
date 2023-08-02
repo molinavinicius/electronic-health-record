@@ -1,0 +1,143 @@
+/appointments:
+  get:
+    tags:
+      - "Appointments"
+    summary: "Get All Appointments"
+    description: "Retrieve a list of all appointments"
+    responses:
+      "200":
+        description: A successful response, containing an array of appointments
+      "401":
+        description: User isn't authorized to access this endpoint
+      "500":
+        description: Internal server error
+  post:
+    tags:
+      - "Appointments"
+    summary: "Create appointment"
+    description: "Create a new appointment"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              patient:
+                type: "integer"
+                format: "int64"
+                description: "The patient ID"
+                example: 1
+              healthProfessional:
+                type: "integer"
+                format: "int64"
+                description: "The health professional ID"
+                example: 1
+              appointmentDate:
+                type: "string"
+                format: "date-time"
+                description: "Appointment date"
+                example: "2023-08-02T10:00:00Z"
+              notes:
+                type: "string"
+                description: "Notes for the appointment"
+                example: "Patient has previously mentioned a persistent cough"
+    responses:
+      "200":
+        description: Successful response, new appointment has been created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuccessReturn"
+      "400":
+        description: Invalid input data
+      "401":
+        description: User unauthorized
+
+/appointments/{id}:
+  get:
+    tags:
+      - "Appointments"
+    summary: "Get Single Appointment"
+    description: "Retrieve a single appointment by its id"
+    parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+        description: "Appointment id"
+    responses:
+      "200":
+        description: Successful response, returning the appointment information
+      "401":
+        description: User isn't authorized to access this endpoint
+      "404":
+        description: Appointment not found
+      "500":
+        description: Internal server error
+  put:
+    tags:
+      - "Appointments"
+    summary: "Update appointment"
+    description: "Update an existing appointment"
+    parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+        description: "Appointment Id"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              patientId:
+                type: "integer"
+                format: "int64"
+                description: "The patient ID"
+                example: 1
+              appointmentDate:
+                type: "string"
+                format: "date-time"
+                description: "Appointment date"
+                example: "2022-04-15T10:00:00Z"
+              duration:
+                type: "integer"
+                format: "int64"
+                description: "Duration of appointment (in minutes)"
+                example: 60
+              notes:
+                type: "string"
+                description: "Notes for the appointment"
+                example: "Patient has previously mentioned a persistent cough"
+    responses:
+      "200":
+        description: Successful response, appointment updated
+      "400":
+        description: Invalid input data
+      "401":
+        description: User unauthorized
+      "404":
+        description: Appointment not found
+  delete:
+    tags:
+      - "Appointments"
+    summary: "Delete appointment"
+    description: "Used for deleting an existing appointment"
+    parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+    responses:
+      "200":
+        description: Successful response
+      "401":
+        description: User unauthorized
+      "404":
+        description: Appointment not found

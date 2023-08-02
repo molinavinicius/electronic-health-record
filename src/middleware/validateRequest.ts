@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ValidationError } from 'class-validator';
 import { transformAndValidate } from 'class-transformer-validator';
 
-function validationMiddleware<T>(
+function validationMiddleware(
     type: any,
     skipMissing = false
 ): (req: Request, res: Response, next: NextFunction) => void {

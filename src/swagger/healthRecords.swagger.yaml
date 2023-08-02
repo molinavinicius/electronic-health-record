@@ -1,0 +1,63 @@
+/health-records:
+  get:
+    tags:
+      - "Health Record"
+    summary: "Get All Health Records"
+    description: "Retrieve a list of all health records"
+    responses:
+      "200":
+        description: A successful response, containing an array of health records
+      "401":
+        description: User isn't authorized to access this endpoint
+      "500":
+        description: Internal server error
+  post:
+    tags:
+      - "Health Record"
+    summary: "Create health record"
+    description: "Used to create a health record"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              patient:
+                type: "integer"
+                format: "int64"
+                description: "The patient ID"
+                example: 1
+              appointment:
+                type: "integer"
+                format: "int64"
+                description: "The appointment ID"
+                example: 1
+              evolution:
+                type: "string"
+                description: "The health record evolution"
+                example: "This is an example of a description that is at least 30 characters long."
+    responses:
+      "200":
+        description: A successful response
+
+/health-records/{id}:
+  get:
+    tags:
+      - "Health Record"
+    summary: "Get Single Health Record"
+    description: "Retrieve a single health record by its id"
+    parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+        description: "Health record id"
+    responses:
+      "200":
+        description: A successful response, containing the health record information
+      "401":
+        description: User isn't authorized to access this endpoint
+      "404":
+        description: Health record not found

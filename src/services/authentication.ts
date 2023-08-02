@@ -29,7 +29,7 @@ class AuthenticationService extends BaseService<EntityTarget<User>> {
         if (user) {
             return {
                 status: 'error',
-                statusCode: 400,
+                statusCode: 409,
                 message: 'Email already in use'
             };
         }

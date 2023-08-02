@@ -1,0 +1,71 @@
+paths:
+  /users:
+    get:
+      tags:
+        - "User"
+      summary: "Get All Users"
+      description: "Retrieve a list of all users"
+      responses:
+        "200":
+          description: Successful response, returning an array of users
+        "401":
+          description: User unauthorized
+
+  /users/profile:
+    get:
+      tags:
+        - "User"
+      summary: "Get User Profile"
+      description: Retrieve the authenticated user's profile
+      responses:
+        "200":
+          description: Successful response, returning the user's information
+        "401":
+          description: User unauthorized
+
+    put:
+      tags:
+        - "User"
+      summary: "Update User Profile"
+      description: Update the authenticated user's profile
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Data to update user profile"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Successful response, user profile updated
+        "400":
+          description: Invalid input data
+        "401":
+          description: User unauthorized
+
+    delete:
+      tags:
+        - "User"
+      summary: "Delete User Profile"
+      description: "Delete the authenticated user's profile"
+      responses:
+        "200":
+          description: Successful response, user profile deleted
+        "401":
+          description: User unauthorized
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      password:
+        type: "string"
+      email:
+        type: "string"
+      role:
+        type: "string"

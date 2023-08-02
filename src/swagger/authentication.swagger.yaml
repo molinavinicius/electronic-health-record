@@ -1,0 +1,62 @@
+/auth/signup:
+  post:
+    tags:
+      - "Authentication"
+    summary: "User signup"
+    description: "New users use this endpoint to sign up"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              name:
+                type: "string"
+                description: "The name of the user"
+                example: "John Doe"
+              email:
+                type: "string"
+                format: "email"
+                description: "The email of the user"
+                example: "john@example.com"
+              password:
+                type: "string"
+                description: "The user's password"
+                example: "strongpassword"
+    responses:
+      "200":
+        description: Confirmation of successful user creation
+      "400":
+        description: Invalid input, object invalid
+      "409":
+        description: User already exists
+/auth/login:
+  post:
+    tags:
+      - "Authentication"
+    summary: "User login"
+    description: "Existing users use this endpoint to log in"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              email:
+                type: "string"
+                format: "email"
+                description: "The email of the user"
+                example: "john@example.com"
+              password:
+                type: "string"
+                description: "The user's password"
+                example: "strongpassword"
+    responses:
+      "200":
+        description: Successful login, returning the user details along with JWT token
+      "400":
+        description: Invalid details provided
+      "401":
+        description: Unauthorized, Incorrect password
+      "404":
+        description: Unauthorized, User doesn't exist

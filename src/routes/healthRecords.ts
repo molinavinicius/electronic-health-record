@@ -17,38 +17,6 @@ HealthRecordRouter.get('/:id', isAuth, async (req: Request, res: Response) => {
     return res.status(user.statusCode).json(user);
 });
 
-/**
- *  @swagger
- *  /health-records:
- *  post:
- *    tags:
- *    - "Health Record"
- *    summary: "Create health record"
- *    description: "Used to create a health record"
- *    requestBody:
- *      content:
- *        application/json:
- *          schema:
- *            type: "object"
- *            properties:
- *              patient:
- *                type: "integer"
- *                format: "int64"
- *                description: "The patient ID"
- *                example: 1
- *              appointment:
- *                type: "integer"
- *                format: "int64"
- *                description: "The appointment ID"
- *                example: 1
- *              evolution:
- *                type: "string"
- *                description: "The health record evolution"
- *                example: "This is an example of a description that is at least 30 characters long."
- *    responses:
- *      '200':
- *        description: A successful response
- */
 HealthRecordRouter.post(
     '/',
     isAuth,

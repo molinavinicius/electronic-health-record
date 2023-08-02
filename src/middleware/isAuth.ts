@@ -1,15 +1,13 @@
 import * as jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { AppDataSource } from '../database';
-import { User } from '../models/user';
 
 export const isAuth = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.get('Authorization');
 
     if (!authHeader) {
-        return res.status(403).json({
+        return res.status(401).json({
             status: 'error',
-            statusCode: 403,
+            statusCode: 401,
             message: 'Not authenticated'
         });
     }
@@ -27,15 +25,15 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
     } catch (err) {
         if (err instanceof jwt.TokenExpiredError) {
             console.log(err);
-            return res.status(403).json({
-                statusCode: 403,
+            return res.status(401).json({
+                statusCode: 401,
                 status: 'error',
                 message: 'Token expired'
             });
         } else if (err instanceof jwt.JsonWebTokenError) {
             console.log(err);
-            return res.status(403).json({
-                statusCode: 403,
+            return res.status(401).json({
+                statusCode: 401,
                 status: 'error',
                 message: 'Invalid token'
             });
@@ -48,9 +46,9 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
         });
     }
     if (!decodedToken) {
-        return res.status(403).json({
+        return res.status(401).json({
             status: 'error',
-            statusCode: 403,
+            statusCode: 401,
             message: 'Not authenticated'
         });
     }
