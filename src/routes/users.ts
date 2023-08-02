@@ -33,9 +33,9 @@ UserRouter.put(
     }
 );
 
-UserRouter.delete('/:id', async (req: Request, res: Response) => {
-    let id = parseInt(req.params.id);
-    let deletedUser = await UserService.update(id, req.body);
+UserRouter.delete('/profile', async (req: AuthenticatedRequest, res: Response) => {
+    let userId = parseInt(req.userId || '');
+    let deletedUser = await UserService.remove(userId);
     return res.status(deletedUser.statusCode).json(deletedUser);
 });
 
