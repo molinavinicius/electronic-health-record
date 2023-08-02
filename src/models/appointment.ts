@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import { IsDateString, IsNotEmpty } from 'class-validator';
+import { IsDateString, IsInt, IsNotEmpty } from 'class-validator';
 import { Patient } from "./patient";
 import { User } from "./user";
-
+import { Transform } from "class-transformer";
 
 @Entity()
 export class Appointment {
@@ -10,7 +10,7 @@ export class Appointment {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Patient, (patient) => patient.appointments, { cascade: true, eager: true })
+    @ManyToOne(() => Patient, (patient) => patient.appointments)
     @IsNotEmpty()
     patient: Patient
 
@@ -19,11 +19,15 @@ export class Appointment {
     @IsDateString()
     appointmentDate: Date
 
+    @Column()
+    @IsInt()
+    duration?: number
+
     @ManyToOne(() => User)
     @IsNotEmpty()
     healthProfessional: User
 
-    @Column()
+    @Column({ nullable: true })
     notes?: string
 
     @CreateDateColumn()
