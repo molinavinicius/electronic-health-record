@@ -20,15 +20,20 @@ AppointmentRouter.get('/:id', isAuth, async (req: Request, res: Response) => {
 AppointmentRouter.post(
     '/',
     isAuth,
-    validationMiddleware(Appointment, true),
+    validationMiddleware(Appointment),
     async (req: Request, res: Response) => {
-        let availableAppointments = await AppointmentsService.createAppointment(
-            req.body.patientId,
-            req.body.doctorId,
-            req.body.appointmentDate,
-            req.body.duration
+        console.log(req.body);
+        let attemptiveToSchedule = await AppointmentsService.validateAppointment(
+            req.body,
+            Object.keys(req.body)
         );
-        return res.status(200).json(availableAppointments);
+        if (attemptiveToSchedule.status === 'error') {
+            return res
+                .status(attemptiveToSchedule.statusCode)
+                .json(attemptiveToSchedule);
+        }
+        let scheduledAppointment = await AppointmentsService.save(attemptiveToSchedule.data)
+        return res.status(scheduledAppointment.statusCode).json(scheduledAppointment);
     }
 );
 
@@ -38,8 +43,31 @@ AppointmentRouter.put(
     validationMiddleware(Appointment, true),
     async (req: Request, res: Response) => {
         let id = parseInt(req.params.id);
-        let updatedUser = await AppointmentsService.update(id, req.body);
-        return res.status(updatedUser.statusCode).json(updatedUser);
+        let existingAppointment = await AppointmentsService.one(id, { relations: ['patient', 'healthProfessional'] });
+        if (!existingAppointment.data) {
+            return res.status(404).json({
+                ...existingAppointment,
+                message: 'Appointment not found'
+            })
+        }
+
+        let appointmentToUpdate = {
+            ...existingAppointment.data,
+            patient: existingAppointment.data.patient.id,
+            healthProfessional: existingAppointment.data.healthProfessional.id,
+            ...req.body
+        }
+
+        console.log('appointmentToUpdate', appointmentToUpdate)
+        let attemptiveToUpdate = await AppointmentsService.validateAppointment(appointmentToUpdate, Object.keys(req.body))
+        if (attemptiveToUpdate.status === 'error') {
+            return res
+                .status(attemptiveToUpdate.statusCode)
+                .json(attemptiveToUpdate);
+        }
+
+        let updatedAppointment = await AppointmentsService.update(id, attemptiveToUpdate.data);
+        return res.status(updatedAppointment.statusCode).json(updatedAppointment);
     }
 );
 

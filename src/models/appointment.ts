@@ -7,10 +7,9 @@ import {
     CreateDateColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { IsDateString, IsInt, IsNotEmpty } from 'class-validator';
+import { IsDateString, IsInt, IsNotEmpty, IsString, ValidateIf } from 'class-validator';
 import { Patient } from './patient';
 import { User } from './user';
-import { Transform } from 'class-transformer';
 
 @Entity()
 export class Appointment {
@@ -28,6 +27,7 @@ export class Appointment {
 
     @Column()
     @IsInt()
+    @ValidateIf((o) => o.duration !== undefined)
     duration?: number;
 
     @ManyToOne(() => User)
@@ -35,6 +35,7 @@ export class Appointment {
     healthProfessional: User;
 
     @Column({ nullable: true })
+    @IsString()
     notes?: string;
 
     @CreateDateColumn()

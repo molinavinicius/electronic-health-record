@@ -5,6 +5,7 @@ import { Appointment } from '../models/appointment';
 import { User } from '../models/user';
 import { Patient } from '../models/patient';
 import { APIReturn } from '../types/api';
+import { error } from 'console';
 
 const APPOINTMENT_DURATION = 30;
 
@@ -21,12 +22,43 @@ class AppointmentService extends BaseService<EntityTarget<Appointment>> {
         this.repository = AppDataSource.getRepository(Appointment);
     }
 
-    async createAppointment(
-        patientId: number,
-        doctorId: number,
-        date: Date,
-        duration: number = APPOINTMENT_DURATION
-    ): Promise<APIReturn<Appointment>> {
+    async validateAppointment(appointmentToUpdate: any, fields: string[]): Promise<APIReturn<Appointment>> {
+        let errors = []
+        if (fields.includes('patient')) {
+            let validatedPatient = await this.validatePatient(appointmentToUpdate.patient)
+            if (validatedPatient.status === 'error') {
+                errors.push(validatedPatient.message)
+            }
+        }
+        if (fields.includes('healthProfessional')) {
+            let validatedHealthProfessional = await this.validateDoctor(appointmentToUpdate.healthProfessional)
+            if (validatedHealthProfessional.status === 'error') {
+                errors.push(validatedHealthProfessional.message)
+            }
+        }
+        if (fields.includes('appointmentDate')) {
+            let validatedAppointmentDate = await this.validateAppointmentDate(
+                appointmentToUpdate.healthProfessional,
+                appointmentToUpdate.appointmentDate
+            )
+            if (validatedAppointmentDate.status === 'error') {
+                errors.push(validatedAppointmentDate.message)
+            }
+        }
+        if (errors.length > 0) {
+            return {
+                status: 'error',
+                statusCode: 400,
+                message: errors.join(', ')
+            }
+        }
+        return {
+            status: 'success',
+            statusCode: 200,
+            data: appointmentToUpdate
+        }
+    }
+    async validatePatient(patientId: number): Promise<APIReturn<Patient>> {
         let patient = await AppDataSource.getRepository(Patient).findOne({
             where: { id: patientId }
         });
@@ -37,6 +69,14 @@ class AppointmentService extends BaseService<EntityTarget<Appointment>> {
                 message: 'Patient not found'
             };
         }
+        return {
+            status: 'success',
+            statusCode: 200,
+            data: patient
+        };
+    }
+
+    async validateDoctor(doctorId: number): Promise<APIReturn<User>> {
         let doctor = await AppDataSource.getRepository(User).findOne({
             where: { id: doctorId }
         });
@@ -44,35 +84,45 @@ class AppointmentService extends BaseService<EntityTarget<Appointment>> {
             return {
                 status: 'error',
                 statusCode: 400,
-                message: 'Doctor not found'
+                message: 'Health professional not found'
             };
         }
-        date = new Date(date);
-        let existingAppointments = await this.checkAvailability(
-            doctor,
+        return {
+            status: 'success',
+            statusCode: 200,
+            data: doctor
+        };
+    }
+
+    async validateAppointmentDate(
+        healthProfessionalId: number,
+        appointmentDate: Date | string
+    ): Promise<APIReturn<Appointment>> {
+
+        let date = new Date(appointmentDate);
+        let existingAppointments = await this._getOverlappingAppointments(
+            healthProfessionalId,
             date,
-            duration
+            APPOINTMENT_DURATION
         );
+
         if (existingAppointments.length > 0) {
             return {
                 status: 'error',
                 statusCode: 400,
-                message: `Doctor ${doctor.name} is not available at this time`
+                message: `This health professional is not available at this time`
             };
         }
 
-        let appointment = {
-            patient: patient.id,
-            healthProfessional: doctor.id,
-            appointmentDate: date,
-            duration: duration
+        return {
+            status: 'success',
+            statusCode: 200,
+            message: 'Appointment date is valid'
         };
-
-        return await this.repository.save(appointment);
     }
 
-    async checkAvailability(
-        doctor: User,
+    async _getOverlappingAppointments(
+        healthProfessionalId: number,
         date: Date,
         duration: number
     ): Promise<Appointment[]> {
@@ -84,7 +134,7 @@ class AppointmentService extends BaseService<EntityTarget<Appointment>> {
         // find appointments that overlap with the doctor's availability
         const overlappingAppointments = await this.repository.find({
             where: {
-                healthProfessional: doctor.id,
+                healthProfessional: healthProfessionalId,
                 appointmentDate: And(
                     LessThanOrEqual(superiorLimit),
                     MoreThanOrEqual(inferiorLimit)
