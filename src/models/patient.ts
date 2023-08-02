@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm"
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    OneToMany
+} from 'typeorm';
 import { IsEmail, IsEnum, IsInt, IsNotEmpty } from 'class-validator';
 import { Appointment } from './appointment';
 import { HealthRecord } from './healthRecord';
@@ -11,46 +18,48 @@ enum Gender {
 @Entity()
 export class Patient {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column()
     @IsNotEmpty()
-    name: string
+    name: string;
 
     @Column()
     @IsNotEmpty()
-    phone: string
+    phone: string;
 
     @Column()
     @IsNotEmpty()
     @IsEmail()
-    email: string
+    email: string;
 
     @Column()
     @IsNotEmpty()
     @IsEnum(Gender)
-    gender: Gender
+    gender: Gender;
 
     @Column({ nullable: true })
-    birthDate: string
+    birthDate: string;
 
-    @Column("int", { nullable: true })
+    @Column('int', { nullable: true })
     @IsInt()
-    height: number
+    height: number;
 
-    @Column("int", { nullable: true })
+    @Column('int', { nullable: true })
     @IsInt()
-    weight: number
+    weight: number;
 
-    @OneToMany(() => Appointment, appointment => appointment.patient)
+    @OneToMany(() => Appointment, (appointment) => appointment.patient)
     appointments: Appointment[];
 
-    @OneToMany(() => HealthRecord, healthRecord => healthRecord.patient, { eager: true })
+    @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.patient, {
+        eager: true
+    })
     healthRecords: HealthRecord[];
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
+    updatedAt: Date;
 }

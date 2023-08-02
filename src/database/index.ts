@@ -1,13 +1,12 @@
-import "reflect-metadata"
-import { DataSource } from "typeorm"
-
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
 
 export const AppDataSource = new DataSource({
-    type: "sqlite",
-    database: "database.sqlite",
+    type: 'sqlite',
+    database: 'database.sqlite',
     synchronize: true,
     logging: false,
-    entities: ["src/models/**/*.ts"],
-    migrations: ["src/database/migrations/**/*{.ts,.js}"],
+    entities: ['src/models/**/*.ts'],
+    migrations: ['src/database/migrations/**/*{.ts,.js}'],
     subscribers: []
-})
+});

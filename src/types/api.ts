@@ -1,7 +1,7 @@
-import { Request } from "express"
+import { Request } from 'express';
 /**
  * Type definition for service return value
- * 
+ *
  * @typedef {Object} APIReturn
  * @property {"success" | "error"} status - Status of the operation
  * @property {number} statusCode - HTTP Status Code of the response
@@ -10,11 +10,11 @@ import { Request } from "express"
  * @property {any} [error] - Optional error object if an error occurred
  */
 export type APIReturn<T> = {
-    status: "success" | "error",
-    statusCode: number,
-    message?: string,
-    data?: T | T[] | any,
-    error?: any
-}
+    status: 'success' | 'error';
+    statusCode: number;
+    message?: string;
+    data?: T | T[] | any;
+    error?: any;
+};
 
-export type AuthenticatedRequest = Request & { userId?: string }
+export type AuthenticatedRequest = Request & { userId?: string };

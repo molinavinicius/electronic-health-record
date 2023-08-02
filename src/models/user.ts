@@ -1,11 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    OneToMany
+} from 'typeorm';
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
 import { Appointment } from './appointment';
 import { HealthRecord } from './healthRecord';
 
 @Entity()
 export class User {
-
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -23,15 +29,18 @@ export class User {
     @Column()
     password: string;
 
-    @OneToMany(() => Appointment, appointment => appointment.healthProfessional)
+    @OneToMany(
+        () => Appointment,
+        (appointment) => appointment.healthProfessional
+    )
     appointments: Appointment[];
 
-    @OneToMany(() => HealthRecord, record => record.healthProfessional)
+    @OneToMany(() => HealthRecord, (record) => record.healthProfessional)
     healthRecords: HealthRecord[];
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
+    updatedAt: Date;
 }

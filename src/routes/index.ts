@@ -11,6 +11,6 @@ rootRouter.use('/patients', PatientRouter);
 rootRouter.use('/users', UserRouter);
 rootRouter.use('/appointments', AppointmentRouter);
 rootRouter.use('/health-records', HealthRecordRouter);
-rootRouter.use('/auth', AuthenticationRouter)
+rootRouter.use('/auth', AuthenticationRouter);
 
 export default rootRouter;

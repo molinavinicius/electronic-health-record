@@ -1,38 +1,45 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    JoinColumn,
+    CreateDateColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import { IsDateString, IsInt, IsNotEmpty } from 'class-validator';
-import { Patient } from "./patient";
-import { User } from "./user";
-import { Transform } from "class-transformer";
+import { Patient } from './patient';
+import { User } from './user';
+import { Transform } from 'class-transformer';
 
 @Entity()
 export class Appointment {
-
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @ManyToOne(() => Patient, (patient) => patient.appointments)
     @IsNotEmpty()
-    patient: Patient
+    patient: Patient;
 
     @Column()
     @IsNotEmpty()
     @IsDateString()
-    appointmentDate: Date
+    appointmentDate: Date;
 
     @Column()
     @IsInt()
-    duration?: number
+    duration?: number;
 
     @ManyToOne(() => User)
     @IsNotEmpty()
-    healthProfessional: User
+    healthProfessional: User;
 
     @Column({ nullable: true })
-    notes?: string
+    notes?: string;
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
+    updatedAt: Date;
 }

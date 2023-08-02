@@ -1,23 +1,32 @@
 import { Request, Response, NextFunction } from 'express';
-import { ValidationError } from "class-validator";
-import { transformAndValidate } from "class-transformer-validator";
+import { ValidationError } from 'class-validator';
+import { transformAndValidate } from 'class-transformer-validator';
 
-
-function validationMiddleware<T>(type: any, skipMissing = false):
-    (req: Request, res: Response, next: NextFunction) => void {
+function validationMiddleware<T>(
+    type: any,
+    skipMissing = false
+): (req: Request, res: Response, next: NextFunction) => void {
     return (req, res, next) => {
-        transformAndValidate(type, req.body, { validator: { skipMissingProperties: skipMissing } })
+        transformAndValidate(type, req.body, {
+            validator: { skipMissingProperties: skipMissing }
+        })
             .then((payload) => {
                 req.body = payload;
                 next();
             })
             .catch((errors) => {
                 const validationErrors = (errors as ValidationError[]).map(
-                    ({ property, constraints }) => `${property}: ${Object.values(constraints || {}).join(", ")}`
+                    ({ property, constraints }) =>
+                        `${property}: ${Object.values(constraints || {}).join(
+                            ', '
+                        )}`
                 );
-                res.status(400).json({ message: "Input validation failed", errors: validationErrors });
+                res.status(400).json({
+                    message: 'Input validation failed',
+                    errors: validationErrors
+                });
             });
     };
 }
 
-export default validationMiddleware
+export default validationMiddleware;
