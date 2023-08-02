@@ -13,7 +13,8 @@
     "migration:create": "cross-var ts-node ./node_modules/typeorm/cli migration:create ./src/database/migrations/$npm_config_name",
     "migration:generate": "cross-var npm run typeorm -- migration:generate ./src/database/migrations/$npm_config_name",
     "migration:run": "npm run build && npm run typeorm -- migration:run",
-    "migration:revert": "npm run typeorm -- migration:revert"
+    "migration:revert": "npm run typeorm -- migration:revert",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.1",
+    "moment": "^2.29.4",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.1.6",
     "swagger-jsdoc": "^6.2.8",
@@ -62,6 +64,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
+    "prettier": "^3.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }
