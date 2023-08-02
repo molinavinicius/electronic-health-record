@@ -54,9 +54,7 @@ export class Patient {
     @OneToMany(() => Appointment, (appointment) => appointment.patient)
     appointments: Appointment[];
 
-    @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.patient, {
-        eager: true
-    })
+    @OneToMany(() => HealthRecord, (healthRecord) => healthRecord.patient)
     healthRecords: HealthRecord[];
 
     @CreateDateColumn()

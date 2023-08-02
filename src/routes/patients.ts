@@ -13,7 +13,7 @@ PatientRouter.get('/', isAuth, async (req: Request, res: Response) => {
 
 PatientRouter.get('/:id', isAuth, async (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
-    let user = await PatientService.one(id);
+    let user = await PatientService.one(id, { relations: ['healthRecords', 'appointments'] });
     return res.status(user.statusCode).json(user);
 });
 
@@ -40,7 +40,7 @@ PatientRouter.put(
 
 PatientRouter.delete('/:id', isAuth, async (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
-    let deletedUser = await PatientService.update(id, req.body);
+    let deletedUser = await PatientService.remove(id);
     return res.status(deletedUser.statusCode).json(deletedUser);
 });
 

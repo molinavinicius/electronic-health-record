@@ -7,7 +7,7 @@ import { Appointment } from '../models/appointment';
 const AppointmentRouter = express.Router();
 
 AppointmentRouter.get('/', isAuth, async (req: Request, res: Response) => {
-    let allUsers = await AppointmentsService.all();
+    let allUsers = await AppointmentsService.all({ relations: ['patient', 'healthProfessional'] });
     return res.status(allUsers.statusCode).json(allUsers);
 });
 
@@ -22,7 +22,7 @@ AppointmentRouter.post(
     isAuth,
     validationMiddleware(Appointment),
     async (req: Request, res: Response) => {
-        console.log(req.body);
+        req.body.patientId = req.body.patient;
         let attemptiveToSchedule = await AppointmentsService.validateAppointment(
             req.body,
             Object.keys(req.body)

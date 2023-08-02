@@ -19,7 +19,6 @@ class BaseService<T> {
     async all(options?: FindManyOptions<T>): Promise<APIReturn<T[]>> {
         try {
             const all = await this.repository.find(options);
-            console.log('all', all);
             return {
                 status: 'success',
                 statusCode: 200,

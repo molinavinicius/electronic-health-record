@@ -13,7 +13,7 @@ HealthRecordRouter.get('/', isAuth, async (req: Request, res: Response) => {
 
 HealthRecordRouter.get('/:id', isAuth, async (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
-    let user = await HealthRecordService.one(id);
+    let user = await HealthRecordService.one(id, { relations: ['patient', 'healthProfessional'] });
     return res.status(user.statusCode).json(user);
 });
 
@@ -55,6 +55,7 @@ HealthRecordRouter.post(
     validationMiddleware(HealthRecord),
     async (req: any, res: Response) => {
         req.body.healthProfessional = req.userId;
+        req.body.patientId = req.body.patient;
         console.log('req.body', req.body);
         let createdUser = await HealthRecordService.save(req.body);
         return res.status(createdUser.statusCode).json(createdUser);

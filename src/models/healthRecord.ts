@@ -18,7 +18,7 @@ export class HealthRecord {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Patient, (patient) => patient.healthRecords)
+    @ManyToOne(() => Patient, (patient) => patient.healthRecords, { onDelete: 'SET NULL' })
     @IsNotEmpty()
     patient: Patient;
 
