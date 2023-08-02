@@ -61,16 +61,4 @@ HealthRecordRouter.post(
     }
 );
 
-// HealthRecordRouter.put('/:id', validationMiddleware(HealthRecord, true), async (req: Request, res: Response) => {
-//     let id = parseInt(req.params.id)
-//     let updatedUser = await HealthRecordService.update(id, req.body)
-//     return res.status(updatedUser.statusCode).json(updatedUser)
-// });
-
-// HealthRecordRouter.delete('/:id', async (req: Request, res: Response) => {
-//     let id = parseInt(req.params.id)
-//     let deletedUser = await HealthRecordService.update(id, req.body)
-//     return res.status(deletedUser.statusCode).json(deletedUser)
-// });
-
 export default HealthRecordRouter;

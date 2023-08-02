@@ -8,7 +8,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { IsNotEmpty, MinLength, ValidateIf, IsDefined } from 'class-validator';
+import { IsNotEmpty, MinLength, ValidateIf, IsDefined, IsString } from 'class-validator';
 import { Patient } from './patient';
 import { Appointment } from './appointment';
 import { User } from './user';
@@ -38,6 +38,7 @@ export class HealthRecord {
         message:
             'The evolution must be at least 30 characters long. Please make a longer description.'
     })
+    @IsString()
     evolution: string;
 
     @CreateDateColumn()

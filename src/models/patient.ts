@@ -6,9 +6,10 @@ import {
     UpdateDateColumn,
     OneToMany
 } from 'typeorm';
-import { IsEmail, IsEnum, IsInt, IsNotEmpty } from 'class-validator';
+import { IsDateString, IsEmail, IsEnum, IsInt, IsNotEmpty } from 'class-validator';
 import { Appointment } from './appointment';
 import { HealthRecord } from './healthRecord';
+import { IsDateStringFormat } from '../validators/dateValidator';
 
 enum Gender {
     Male = 'male',
@@ -39,6 +40,7 @@ export class Patient {
     gender: Gender;
 
     @Column({ nullable: true })
+    @IsDateStringFormat('YYYY-MM-DD')
     birthDate: string;
 
     @Column('int', { nullable: true })

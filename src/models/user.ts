@@ -6,7 +6,7 @@ import {
     UpdateDateColumn,
     OneToMany
 } from 'typeorm';
-import { IsNotEmpty, IsEmail, Length } from 'class-validator';
+import { IsNotEmpty, IsEmail, Length, IsStrongPassword } from 'class-validator';
 import { Appointment } from './appointment';
 import { HealthRecord } from './healthRecord';
 
