@@ -42,7 +42,7 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 AppDataSource.initialize()
     .then(async () => {
         const app = express();
-        console.log(process.env.JWT_SECRET);
+
         // Porta do servidor
         const PORT = process.env.PORT || 8080;
         // Host do servidor
@@ -64,7 +64,7 @@ AppDataSource.initialize()
         });
 
         app.listen(PORT, () =>
-            console.log(`Servidor rodando com sucesso ${HOSTNAME}:${PORT}`)
+            console.log(`Servidor rodando com sucesso na porta ${PORT}`)
         );
     })
     .catch((err) => console.log(err));
